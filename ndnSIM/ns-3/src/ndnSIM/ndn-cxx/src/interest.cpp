@@ -101,6 +101,29 @@ Interest::refreshNonce()
   setNonce(newNonce);
 }
 
+Interest&
+Interest::setHashValidation(char* ch){
+  if (m_wire.hasWire() && m_hashValidation.value_size == strlen(ch)){
+    std::memcpy(const_cast<uint8_t*>(m_hashValidation.value()), &ch , strlen(ch));
+  }
+  else{
+    m_hashValidation = makeStringBlock(tlv::HashValidation,std::string(ch));
+    m_wire.reset();
+  }
+  return *this;
+}
+
+char*
+Interest::getHashValidation() const{
+  char* ch = "test input";
+  if(!m_hashValidation.hasWire()){
+    const_cast<Interest*>(this)->setHashValidation(ch);
+  }
+  else{
+    return "Not wired";
+  }
+}
+
 bool
 Interest::matchesName(const Name& name) const
 {
@@ -253,6 +276,7 @@ Interest::wireEncode(EncodingImpl<TAG>& encoder) const
   getNonce(); // to ensure that Nonce is properly set
   totalLength += encoder.prependBlock(m_nonce);
 
+
   // Selectors
   if (hasSelectors())
     {
@@ -261,6 +285,10 @@ Interest::wireEncode(EncodingImpl<TAG>& encoder) const
 
   // Name
   totalLength += getName().wireEncode(encoder);
+
+  // HashValidation
+  getHashValidation();
+  totalLength += encoder.prependBlock(m_hashValidation);
 
   totalLength += encoder.prependVarNumber(totalLength);
   totalLength += encoder.prependVarNumber(tlv::Interest);
@@ -321,6 +349,9 @@ Interest::wireDecode(const Block& wire)
 
   // Nonce
   m_nonce = m_wire.get(tlv::Nonce);
+
+  // HashValidation
+  m_hashValidation = m_wire.get(tlv::HashValidation);
 
   // InterestLifetime
   val = m_wire.find(tlv::InterestLifetime);
