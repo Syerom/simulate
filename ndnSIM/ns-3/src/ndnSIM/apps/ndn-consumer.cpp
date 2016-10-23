@@ -193,6 +193,7 @@ Consumer::SendPacket()
 
   // NS_LOG_INFO ("Requesting Interest: \n" << *interest);
   NS_LOG_INFO("> Interest for " << seq);
+  NS_LOG_INFO("\t interest hashValidation: "<<interest->getHashValidation());
 
   WillSendOutInterest(seq);
 
@@ -250,6 +251,8 @@ Consumer::OnData(shared_ptr<const Data> data)
   m_retxSeqs.erase(seq);
 
   m_rtt->AckSeq(SequenceNumber32(seq));
+  NS_LOG_INFO("Receivid DATA Content is  " << readString(data->getContent()));
+
 }
 
 void

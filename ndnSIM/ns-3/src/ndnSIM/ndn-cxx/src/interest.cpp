@@ -103,7 +103,7 @@ Interest::refreshNonce()
 
 Interest&
 Interest::setHashValidation(char* ch){
-  if (m_wire.hasWire() && m_hashValidation.value_size == strlen(ch)){
+  if (m_wire.hasWire() && m_hashValidation.value_size() == strlen(ch)){
     std::memcpy(const_cast<uint8_t*>(m_hashValidation.value()), &ch , strlen(ch));
   }
   else{
@@ -115,12 +115,13 @@ Interest::setHashValidation(char* ch){
 
 char*
 Interest::getHashValidation() const{
-  char* ch = "test input";
+  char* ch = (char*)"test input";
   if(!m_hashValidation.hasWire()){
     const_cast<Interest*>(this)->setHashValidation(ch);
+    return ch;
   }
   else{
-    return "Not wired";
+    return ch;
   }
 }
 

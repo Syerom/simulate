@@ -97,6 +97,7 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   App::OnInterest(interest); // tracing inside
 
   NS_LOG_FUNCTION(this << interest);
+  NS_LOG_INFO("HahValidation is " << interest->getHashValidation());
 
   if (!m_active)
     return;
@@ -109,8 +110,11 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   data->setName(dataName);
   data->setFreshnessPeriod(::ndn::time::milliseconds(m_freshness.GetMilliSeconds()));
 
-  data->setContent(make_shared< ::ndn::Buffer>(m_virtualPayloadSize));
-
+  //data->setContent(make_shared< ::ndn::Buffer>(m_virtualPayloadSize));
+  // setContent with string 
+  static const std::string content = "Hello Kitty";
+  data->setContent(reinterpret_cast<const uint8_t*>(content.c_str()), content.size());
+  
   Signature signature;
   SignatureInfo signatureInfo(static_cast< ::ndn::tlv::SignatureTypeValue>(255));
 
@@ -124,7 +128,7 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   data->setSignature(signature);
 
   NS_LOG_INFO("node(" << GetNode()->GetId() << ") responding with Data: " << data->getName());
-
+  NS_LOG_INFO("Data Content is " << readString(data->getContent()));
   // to create real wire encoding
   data->wireEncode();
 
