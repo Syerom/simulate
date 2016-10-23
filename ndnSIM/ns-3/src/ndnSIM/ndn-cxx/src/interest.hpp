@@ -30,6 +30,7 @@
 #include "lp/tags.hpp"
 #include "tag-host.hpp"
 #include "link.hpp"
+#include <string>
 
 namespace ndn {
 
@@ -275,6 +276,18 @@ public: // Name and guiders
   void
   refreshNonce();
 
+  char*
+  getHashValidation() const;
+
+  Interest&
+  setHashValidation(char* ch);
+
+  bool
+  hasHashValidation() const
+  {
+    return m_hashValidation.hasWire();
+  }
+
 #ifdef NDN_LP_KEEP_LOCAL_CONTROL_HEADER
 public: // local control header
   /** @deprecated use getTag and setTag with lp::IncomingFaceIdTag, lp::NextHopFaceIdTag
@@ -440,6 +453,8 @@ private:
   Selectors m_selectors;
   mutable Block m_nonce;
   time::milliseconds m_interestLifetime;
+  // adding private member about new field of interest packet
+  mutable Block m_hashValidation;
 
   mutable Block m_link;
   mutable shared_ptr<Link> m_linkCached;
