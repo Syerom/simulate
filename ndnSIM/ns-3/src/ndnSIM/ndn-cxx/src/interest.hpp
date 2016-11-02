@@ -288,6 +288,18 @@ public: // Name and guiders
     return m_hashValidation.hasWire();
   }
 
+  char*
+  getSID() const;
+
+  Interest&
+  setSID(char* ch);
+
+  bool
+  hasSID() const
+  {
+    return m_SID.hasWire();
+  }
+
 #ifdef NDN_LP_KEEP_LOCAL_CONTROL_HEADER
 public: // local control header
   /** @deprecated use getTag and setTag with lp::IncomingFaceIdTag, lp::NextHopFaceIdTag
@@ -455,6 +467,9 @@ private:
   time::milliseconds m_interestLifetime;
   // adding private member about new field of interest packet
   mutable Block m_hashValidation;
+  // adding private member about new field of interest packet
+  mutable Block m_SID;
+
 
   mutable Block m_link;
   mutable shared_ptr<Link> m_linkCached;
