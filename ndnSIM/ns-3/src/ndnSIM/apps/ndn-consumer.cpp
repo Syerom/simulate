@@ -194,6 +194,8 @@ Consumer::SendPacket()
   // NS_LOG_INFO ("Requesting Interest: \n" << *interest);
   NS_LOG_INFO("> Interest for " << seq);
   NS_LOG_INFO("\t interest hashValidation: "<<interest->getHashValidation());
+  NS_LOG_INFO("\t SID : "<<interest->getSID());
+
 
   WillSendOutInterest(seq);
 

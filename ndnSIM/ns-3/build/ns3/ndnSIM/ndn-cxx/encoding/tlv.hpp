@@ -89,6 +89,8 @@ enum {
   SelectedDelegation = 32,
   // adding field in interest packet
   HashValidation = 33,
+  // adding field in interest packet
+  SID = 34,
 
   AppPrivateBlock1 = 128,
   AppPrivateBlock2 = 32767
