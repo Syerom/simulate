@@ -147,7 +147,35 @@ Interest::getSID() const{
   else{
     return ch;
   }
+}
+
+Interest&
+Interest::setRoleName(char* ch){
+  if (m_wire.hasWire() && m_RoleName.value_size() == strlen(ch)){
+    std::memcpy(const_cast<uint8_t*>(m_RoleName.value()), &ch , strlen(ch));
+  }
+  else{
+    m_RoleName = makeStringBlock(tlv::m_RoleName,std::string(ch));
+    m_wire.reset();
+  }
+  return *this;
 } 
+
+char*
+Interest::getRoleName() const{
+  char* ch = (char*)"M0419169";
+  char* noRoleName = (char*)"No Role Name";
+
+  if(!m_RoleName.hasWire()){
+    const_cast<Interest*>(this)->setRoleName(ch);
+  }
+  if (!m_RoleName.hasWire()){
+    return noRoleName;
+  }else {
+    return ch;
+  }
+ }
+
 
 bool
 Interest::matchesName(const Name& name) const
