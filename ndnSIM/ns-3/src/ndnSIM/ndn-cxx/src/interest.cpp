@@ -163,7 +163,7 @@ Interest::setRoleName(char* ch){
 
 char*
 Interest::getRoleName() const{
-  char* ch = (char*)"M0419169";
+  char* ch = (char*)"Engineer";
   char* noRoleName = (char*)"No Role Name";
 
   if(!m_RoleName.hasWire()){
