@@ -125,6 +125,30 @@ Interest::getHashValidation() const{
   }
 }
 
+Interest&
+Interest::setSID(char* ch){
+  if (m_wire.hasWire() && m_SID.value_size() == strlen(ch)){
+    std::memcpy(const_cast<uint8_t*>(m_SID.value()), &ch , strlen(ch));
+  }
+  else{
+    m_SID = makeStringBlock(tlv::SID,std::string(ch));
+    m_wire.reset();
+  }
+  return *this;
+}
+
+char*
+Interest::getSID() const{
+  char* ch = (char*)"M0419169";
+  if(!m_SID.hasWire()){
+    const_cast<Interest*>(this)->setSID(ch);
+    return ch;
+  }
+  else{
+    return ch;
+  }
+} 
+
 bool
 Interest::matchesName(const Name& name) const
 {
