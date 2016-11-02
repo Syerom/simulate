@@ -97,7 +97,9 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   App::OnInterest(interest); // tracing inside
 
   NS_LOG_FUNCTION(this << interest);
-  NS_LOG_INFO("HahValidation is " << interest->getHashValidation());
+  NS_LOG_INFO("\t HahValidation is " << interest->getHashValidation());
+  NS_LOG_INFO("\t SID is " << interest->getSID());
+
 
   if (!m_active)
     return;
