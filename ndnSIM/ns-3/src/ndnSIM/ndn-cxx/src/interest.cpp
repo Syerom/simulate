@@ -315,6 +315,10 @@ Interest::wireEncode(EncodingImpl<TAG>& encoder) const
   getHashValidation();
   totalLength += encoder.prependBlock(m_hashValidation);
 
+  // SID
+  getSID();
+  totalLength += encoder.prependBlock(m_SID);
+
   totalLength += encoder.prependVarNumber(totalLength);
   totalLength += encoder.prependVarNumber(tlv::Interest);
   return totalLength;
@@ -377,6 +381,9 @@ Interest::wireDecode(const Block& wire)
 
   // HashValidation
   m_hashValidation = m_wire.get(tlv::HashValidation);
+
+  // SID
+  m_SID = m_wire.get(tlv::SID);
 
   // InterestLifetime
   val = m_wire.find(tlv::InterestLifetime);
