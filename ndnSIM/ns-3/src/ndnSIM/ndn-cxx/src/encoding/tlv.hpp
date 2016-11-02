@@ -92,7 +92,7 @@ enum {
   // adding field in interest packet
   SID = 34,
   // adding field in interest packet
-  RoleName = 35,
+  RoleName = 35, 
 
   AppPrivateBlock1 = 128,
   AppPrivateBlock2 = 32767
