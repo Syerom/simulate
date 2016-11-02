@@ -99,6 +99,8 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   NS_LOG_FUNCTION(this << interest);
   NS_LOG_INFO("\t HahValidation is " << interest->getHashValidation());
   NS_LOG_INFO("\t SID is " << interest->getSID());
+  NS_LOG_INFO("\t RoleName is " << interest->getRoleName());
+
 
 
   if (!m_active)
