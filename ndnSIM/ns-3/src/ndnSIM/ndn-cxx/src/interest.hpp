@@ -300,6 +300,18 @@ public: // Name and guiders
     return m_SID.hasWire();
   }
 
+  char*
+  getRoleName() const;
+
+  Interest&
+  setRoleName(char* ch);
+
+  bool
+  hasRoleName()
+  {
+    return m_RoleName.hasWire();
+  }
+
 #ifdef NDN_LP_KEEP_LOCAL_CONTROL_HEADER
 public: // local control header
   /** @deprecated use getTag and setTag with lp::IncomingFaceIdTag, lp::NextHopFaceIdTag
@@ -469,6 +481,8 @@ private:
   mutable Block m_hashValidation;
   // adding private member about new field of interest packet
   mutable Block m_SID;
+  // adding private member about new field of interest packet
+  mutable Block m_RoleName;
 
 
   mutable Block m_link;
