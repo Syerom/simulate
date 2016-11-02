@@ -155,7 +155,7 @@ Interest::setRoleName(char* ch){
     std::memcpy(const_cast<uint8_t*>(m_RoleName.value()), &ch , strlen(ch));
   }
   else{
-    m_RoleName = makeStringBlock(tlv::m_RoleName,std::string(ch));
+    m_RoleName = makeStringBlock(tlv::RoleName,std::string(ch));
     m_wire.reset();
   } 
   return *this;
