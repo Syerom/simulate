@@ -157,7 +157,7 @@ Interest::setRoleName(char* ch){
   else{
     m_RoleName = makeStringBlock(tlv::m_RoleName,std::string(ch));
     m_wire.reset();
-  }
+  } 
   return *this;
 } 
 
@@ -345,6 +345,11 @@ Interest::wireEncode(EncodingImpl<TAG>& encoder) const
 
   // SID
   getSID();
+
+  // Role Name
+  getRoleName();
+  totalLength += encoder.prependBlock(m_RoleName);
+
   totalLength += encoder.prependBlock(m_SID);
 
   totalLength += encoder.prependVarNumber(totalLength);
@@ -412,6 +417,9 @@ Interest::wireDecode(const Block& wire)
 
   // SID
   m_SID = m_wire.get(tlv::SID);
+
+  // Role Name
+  m_RoleName = m_wire.get(tlv::RoleName);
 
   // InterestLifetime
   val = m_wire.find(tlv::InterestLifetime);
