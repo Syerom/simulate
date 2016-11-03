@@ -29,6 +29,7 @@
 #include "helper/ndn-fib-helper.hpp"
 
 #include <memory>
+#include <string.h>
 
 NS_LOG_COMPONENT_DEFINE("ndn.Producer");
 
@@ -106,19 +107,30 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   if (!m_active)
     return;
 
-  // test for drop non-matched interest
 
 
-  Name dataName(interest->getName());
-
-  // check the RoleName;
-  //Name dataName(Name(std::string("prefix/company/info/employee/file.pdf")));
-  //dataName.append((Name(std::string("/employee"))));
+  //Name dataName(Name(std::string("/company/info/apple/word.pdf")));
   // dataName.append(m_postfix);
   // dataName.appendVersion();
-
+  Name dataName(interest->getName());
   auto data = make_shared<Data>();
   data->setName(dataName);
+  NS_LOG_INFO("\t\t data name is " << data->getName());
+
+  // test for drop non-matched interest
+  
+  // if (!(interest->matchesData(*data)))
+  // {
+  //   interest.reset();
+  //   return;
+  // }
+  char* roleName=(char*)"apple";
+  if (strcmp(interest->getRoleName(),roleName)){
+    NS_LOG_INFO("\t\t"<<interest->getSID()<<"is not under role..." );
+    interest.reset();
+    return;
+  }
+
   data->setFreshnessPeriod(::ndn::time::milliseconds(m_freshness.GetMilliSeconds()));
 
   //data->setContent(make_shared< ::ndn::Buffer>(m_virtualPayloadSize));

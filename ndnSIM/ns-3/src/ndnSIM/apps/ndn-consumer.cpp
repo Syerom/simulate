@@ -179,9 +179,9 @@ Consumer::SendPacket()
     seq = m_seq++;
   }
 
-  // set check role prefix for provider
 
   shared_ptr<Name> nameWithSequence = make_shared<Name>(m_interestName);
+  nameWithSequence->append(Name(std::string("/employee/word.pdf/")));
   nameWithSequence->appendSequenceNumber(seq);
 
   //
@@ -218,7 +218,7 @@ Consumer::OnData(shared_ptr<const Data> data)
 {
   if (!m_active)
     return;
-
+ 
   App::OnData(data); // tracing inside
 
   NS_LOG_FUNCTION(this << data);

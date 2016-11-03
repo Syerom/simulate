@@ -32,21 +32,21 @@ main(int argc, char* argv[])
   ndnHelper.InstallAll();
 
   // Choosing forwarding strategy
-  ndn::StrategyChoiceHelper::InstallAll("/company/info/file.pdf", "/localhost/nfd/strategy/multicast");
+  ndn::StrategyChoiceHelper::InstallAll("/company/info/", "/localhost/nfd/strategy/multicast");
 
   // Installing applications
 
   // Consumer
   ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
   // Consumer will request /prefix/0, /prefix/1, ...
-  consumerHelper.SetPrefix("/company/info/file.pdf");
+  consumerHelper.SetPrefix("/company/info");
   consumerHelper.SetAttribute("Frequency", StringValue("2")); // 10 interests a second
   consumerHelper.Install(nodes.Get(0));                        // first node
 
   // Producer
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
   // Producer will reply to all requests starting with /prefix
-  producerHelper.SetPrefix("/company/info/file.pdf");
+  producerHelper.SetPrefix("/company/info");
   producerHelper.SetAttribute("PayloadSize", StringValue("1024"));
   producerHelper.Install(nodes.Get(2)); // last node
 
