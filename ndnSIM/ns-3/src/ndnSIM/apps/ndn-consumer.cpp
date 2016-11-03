@@ -179,9 +179,11 @@ Consumer::SendPacket()
     seq = m_seq++;
   }
 
-  //
+  // set check role prefix for provider
+
   shared_ptr<Name> nameWithSequence = make_shared<Name>(m_interestName);
   nameWithSequence->appendSequenceNumber(seq);
+
   //
 
   // shared_ptr<Interest> interest = make_shared<Interest> ();
@@ -195,6 +197,8 @@ Consumer::SendPacket()
   NS_LOG_INFO("> Interest for " << seq);
   NS_LOG_INFO("\t interest hashValidation: "<<interest->getHashValidation());
   NS_LOG_INFO("\t SID : "<<interest->getSID());
+  NS_LOG_INFO("\t Role Name : "<<interest->getRoleName());
+
 
 
   WillSendOutInterest(seq);

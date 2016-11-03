@@ -106,7 +106,14 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   if (!m_active)
     return;
 
+  // test for drop non-matched interest
+
+
   Name dataName(interest->getName());
+
+  // check the RoleName;
+  //Name dataName(Name(std::string("prefix/company/info/employee/file.pdf")));
+  //dataName.append((Name(std::string("/employee"))));
   // dataName.append(m_postfix);
   // dataName.appendVersion();
 
