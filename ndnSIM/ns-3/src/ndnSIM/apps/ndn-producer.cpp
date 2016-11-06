@@ -124,9 +124,22 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   //   interest.reset();
   //   return;
   // }
-  char* roleName=(char*)"apple";
-  if (strcmp(interest->getRoleName(),roleName)){
-    NS_LOG_INFO("\t\t"<<interest->getSID()<<"is not under role..." );
+
+  // check SID underRole
+  char* roleName=(char*)"Engineer";
+  char* sid=(char*)"M0419169";
+  if (strcmp(interest->getSID(),sid)){
+    if (strcmp(interest->getRoleName(),roleName)){
+      NS_LOG_INFO("\t\t"<<interest->getSID()<<"is not under role..." );
+      interest.reset();
+      return;
+    }
+  }
+
+  //check hashValidation
+  char* checkHashValidation=(char*)"test noput";
+  if(strcmp(interest->getHashValidation(),checkHashValidation)){
+    NS_LOG_INFO("\t\t Hash token Error!!!!!!!!");
     interest.reset();
     return;
   }

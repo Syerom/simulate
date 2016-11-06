@@ -181,7 +181,7 @@ Consumer::SendPacket()
 
 
   shared_ptr<Name> nameWithSequence = make_shared<Name>(m_interestName);
-  nameWithSequence->append(Name(std::string("/employee/word.pdf/")));
+  nameWithSequence->append(Name(std::string("/word.pdf/")));
   nameWithSequence->appendSequenceNumber(seq);
 
   //
