@@ -137,7 +137,7 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   }
 
   //check hashValidation
-  char* checkHashValidation=(char*)"test noput";
+  char* checkHashValidation=(char*)"test input";
   if(strcmp(interest->getHashValidation(),checkHashValidation)){
     NS_LOG_INFO("\t\t Hash token Error!!!!!!!!");
     interest.reset();
