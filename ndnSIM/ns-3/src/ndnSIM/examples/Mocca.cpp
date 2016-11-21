@@ -19,20 +19,20 @@ main(int argc, char* argv[])
 
   // Creating nodes
   NodeContainer nodes;
-  // nodes.Create(4);
+  nodes.Create(4);
 
   // Connecting nodes using two links
   PointToPointHelper p2p;
   p2p.Install(nodes.Get(0), nodes.Get(1));
   p2p.Install(nodes.Get(1), nodes.Get(2));
-  // p2p.Install(nodes.Get(3), nodes.Get(1));
-  // p2p.Install(nodes.Get(3), nodes.Get(2));
+  p2p.Install(nodes.Get(3), nodes.Get(1));
+  p2p.Install(nodes.Get(3), nodes.Get(2));
 
   // Install NDN stack on all nodes
   ndn::StackHelper ndnHelper;
   ndnHelper.SetDefaultRoutes(true);
   //Content store in the middle NDN router
-  // ndnHelper.SetOldContentStore("ns3::ndn::cs::Lru","MaxSize","100");
+  ndnHelper.SetOldContentStore("ns3::ndn::cs::Lru","MaxSize","100");
   ndnHelper.InstallAll();
 
   // Choosing forwarding strategy
@@ -48,10 +48,10 @@ main(int argc, char* argv[])
   consumerHelper.Install(nodes.Get(0));                        // first node
 
   // Consumer1
-  // ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr");
-  // consumerHelper2.SetPrefix("/company/info");
-  // consumerHelper2.SetAttribute("Frequency", StringValue("1"));
-  // consumerHelper2.Install(nodes.Get(3));
+  ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr");
+  consumerHelper2.SetPrefix("/company/info");
+  consumerHelper2.SetAttribute("Frequency", StringValue("1"));
+  consumerHelper2.Install(nodes.Get(3));
 
   // Producer
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
