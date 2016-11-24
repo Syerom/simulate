@@ -126,7 +126,7 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   // }
 
   // check SID underRole
-  char* roleName=(char*)"Engineer";
+  char* roleName=(char*)"avb";
   char* sid=(char*)"M0419169";
   if (strcmp(interest->getSID(),sid)){
     if (strcmp(interest->getRoleName(),roleName)){

@@ -47,7 +47,7 @@ main(int argc, char* argv[])
   consumerHelper.SetAttribute("Frequency", StringValue("1")); // 10 interests a second
   consumerHelper.Install(nodes.Get(0));                        // first node
 
-  // Consumer1
+  // // Consumer1
   ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr");
   consumerHelper2.SetPrefix("/company/info");
   consumerHelper2.SetAttribute("Frequency", StringValue("1"));
@@ -55,10 +55,14 @@ main(int argc, char* argv[])
 
   // Producer
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
+  // producerHelper.SetAttribute("Freshness", TimeValue(Seconds(10.0))); // freshness 2 seconds (!!!
   // Producer will reply to all requests starting with /prefix
   producerHelper.SetPrefix("/company/info");
   producerHelper.SetAttribute("PayloadSize", StringValue("1024"));
   producerHelper.Install(nodes.Get(2)); // last node
+
+  
+  //ndn::CsTracer::InstallAll("cs-trace.txt", Seconds(1));
 
   Simulator::Stop(Seconds(1));
 

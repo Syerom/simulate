@@ -192,6 +192,12 @@ Consumer::SendPacket()
   interest->setName(*nameWithSequence);
   time::milliseconds interestLifeTime(m_interestLifeTime.GetMilliSeconds());
   interest->setInterestLifetime(interestLifeTime);
+  char* rolaName = (char*) "avb";
+  char* SID = (char*) "M0419169";
+  char* hashValidation = (char*) "test input";
+  interest->setRoleName(rolaName);
+  interest->setSID(SID);
+  interest->setHashValidation(hashValidation);
 
   // NS_LOG_INFO ("Requesting Interest: \n" << *interest);
   NS_LOG_INFO("> Interest for " << seq);

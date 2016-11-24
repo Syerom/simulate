@@ -30,6 +30,7 @@
 #include "ns3/log.h"
 #include "ns3/uinteger.h"
 #include "ns3/string.h"
+#include <string.h>
 
 #include "../../utils/trie/trie-with-policy.hpp"
 
@@ -206,7 +207,7 @@ shared_ptr<Data>
 ContentStoreImpl<Policy>::Lookup(shared_ptr<const Interest> interest)
 {
   NS_LOG_FUNCTION(this << interest->getName());
-
+  //printf(".............................\n");
   typename super::const_iterator node;
   if (interest->getExclude().empty()) {
     node = this->deepest_prefix_match(interest->getName());
@@ -218,7 +219,7 @@ ContentStoreImpl<Policy>::Lookup(shared_ptr<const Interest> interest)
 
   if (node != this->end()) {
     this->m_cacheHitsTrace(interest, node->payload()->GetData());
-
+    
     shared_ptr<Data> copy = make_shared<Data>(*node->payload()->GetData());
     return copy;
   }

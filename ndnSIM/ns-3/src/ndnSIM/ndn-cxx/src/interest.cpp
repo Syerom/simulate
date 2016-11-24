@@ -115,7 +115,8 @@ Interest::setHashValidation(char* ch){
 
 char*
 Interest::getHashValidation() const{
-  char* ch = (char*)"test input";
+  std::string hashValidation = readString(m_hashValidation);
+  char* ch = strdup(hashValidation.c_str());
   if(!m_hashValidation.hasWire()){
     const_cast<Interest*>(this)->setHashValidation(ch);
     return ch;
@@ -139,7 +140,8 @@ Interest::setSID(char* ch){
 
 char*
 Interest::getSID() const{
-  char* ch = (char*)"M0419169";
+  std::string SID = readString(m_SID);
+  char* ch = strdup(SID.c_str());  
   if(!m_SID.hasWire()){
     const_cast<Interest*>(this)->setSID(ch);
     return ch;
@@ -163,14 +165,12 @@ Interest::setRoleName(char* ch){
 
 char*
 Interest::getRoleName() const{
-  char* ch = (char*)"Engineer";
-  char* noRoleName = (char*)"No Role Name";
+  std::string roleName = readString(m_RoleName);
+  char* ch = strdup(roleName.c_str());
 
   if(!m_RoleName.hasWire()){
     const_cast<Interest*>(this)->setRoleName(ch);
-  }
-  if (!m_RoleName.hasWire()){
-    return noRoleName;
+    return ch;
   }else {
     return ch;
   }
