@@ -51,7 +51,7 @@ main(int argc, char* argv[])
   ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr");
   consumerHelper2.SetPrefix("/company/info");
   consumerHelper2.SetAttribute("Frequency", StringValue("1"));
-  consumerHelper2.Install(nodes.Get(3));
+  consumerHelper2.Install(nodes.Get(3)).Start(Seconds(0.5));
 
   // Producer
   ndn::AppHelper producerHelper("ns3::ndn::Producer");

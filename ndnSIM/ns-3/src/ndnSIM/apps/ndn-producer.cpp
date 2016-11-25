@@ -157,7 +157,6 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   if (m_keyLocator.size() > 0) {
     signatureInfo.setKeyLocator(m_keyLocator);
   }
-
   signature.setInfo(signatureInfo);
   signature.setValue(::ndn::nonNegativeIntegerBlock(::ndn::tlv::SignatureValue, m_signature));
 

@@ -98,7 +98,6 @@ Scheduler::scheduleEvent(const time::nanoseconds& after, const Event& event)
                                              &std::function<void()>::operator(), eventWithCleanup);
   *eventId = std::move(id);
   m_events.insert(eventId);
-
   return eventId;
 }
 

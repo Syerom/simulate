@@ -216,6 +216,7 @@ InMemoryStorage::find(const Name& name)
   //if the given name is not the prefix of the lower_bound, return null
   if (!name.isPrefixOf((*it)->getFullName())) {
     return shared_ptr<const Data>();
+    //return NULL;
   }
 
   afterAccess(*it);

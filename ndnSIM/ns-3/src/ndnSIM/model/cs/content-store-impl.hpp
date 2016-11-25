@@ -234,7 +234,6 @@ bool
 ContentStoreImpl<Policy>::Add(shared_ptr<const Data> data)
 {
   NS_LOG_FUNCTION(this << data->getName());
-
   Ptr<entry> newEntry = Create<entry>(this, data);
   std::pair<typename super::iterator, bool> result = super::insert(data->getName(), newEntry);
 
