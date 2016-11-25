@@ -158,11 +158,11 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
     else {
       shared_ptr<Data> match = m_csFromNdnSim->Lookup(interest.shared_from_this());
       if (match != nullptr ) {
-        // if (strcmp(interest.getSID(),"123"))
-        // {
-        //   printf("fail\n");
-        //   return;
-        // }else
+        if (strcmp(interest.getSID(),"123"))
+        {
+          printf("fail\n");
+          return;
+        }else
         this->onContentStoreHit(inFace, pitEntry, interest, *match);
       }
       else {
