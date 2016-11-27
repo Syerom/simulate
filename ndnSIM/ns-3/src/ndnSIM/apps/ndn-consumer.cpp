@@ -192,10 +192,12 @@ Consumer::SendPacket()
   interest->setName(*nameWithSequence);
   time::milliseconds interestLifeTime(m_interestLifeTime.GetMilliSeconds());
   interest->setInterestLifetime(interestLifeTime);
-  char* rolaName = (char*) "avb";
+
+  char* roleName = (char*) "avb";
   char* SID = (char*) "M0419169";
-  char* hashValidation = (char*) "test input";
-  interest->setRoleName(rolaName);
+  // static char* hashValidation = SHA256Generation("test input");
+  char* hashValidation = (char*)"test input";
+  interest->setRoleName(roleName);
   interest->setSID(SID);
   interest->setHashValidation(hashValidation);
 
@@ -300,3 +302,4 @@ Consumer::WillSendOutInterest(uint32_t sequenceNumber)
 
 } // namespace ndn
 } // namespace ns3
+

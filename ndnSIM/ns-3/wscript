@@ -690,6 +690,7 @@ def build(bld):
         Logs.warn("No modules were built.  Use waf configure --enable-modules to enable modules.")
         return
 
+    bld.env['LIB_PYEMBED'] = bld.env['LIB_PYEMBED']+ ["cryptopp"]
     bld.env['NS3_MODULES_WITH_TEST_LIBRARIES'] = []
     bld.env['NS3_ENABLED_MODULE_TEST_LIBRARIES'] = []
     bld.env['NS3_SCRIPT_DEPENDENCIES'] = []

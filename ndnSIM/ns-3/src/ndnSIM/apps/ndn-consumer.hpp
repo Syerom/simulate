@@ -40,6 +40,10 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/member.hpp>
 
+#include <cryptopp/base64.h>
+#include <cryptopp/sha.h>
+#include <string>
+
 namespace ns3 {
 namespace ndn {
 
@@ -127,6 +131,19 @@ protected:
    */
   Time
   GetRetxTimer() const;
+
+  // static char*
+  // SHA256Generation(const std::string str)
+  // {
+  //   std::string digest;
+  //   CryptoPP::SHA256 hash;
+
+  //   CryptoPP::StringSource foo(str, true,
+  //     new CryptoPP::HashFilter(hash,
+  //       new CryptoPP::Base64Encoder (
+  //         new CryptoPP::StringSink(digest))));
+  //   return (char*)digest.c_str();
+  // }
 
 protected:
   Ptr<UniformRandomVariable> m_rand; ///< @brief nonce generator

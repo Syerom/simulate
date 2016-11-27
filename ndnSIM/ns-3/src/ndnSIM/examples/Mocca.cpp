@@ -36,7 +36,7 @@ main(int argc, char* argv[])
   ndnHelper.InstallAll();
 
   // Choosing forwarding strategy
-  ndn::StrategyChoiceHelper::InstallAll("/company/info/", "/localhost/nfd/strategy/multicast");
+  ndn::StrategyChoiceHelper::InstallAll("/company/info/", "/localhost/nfd/strategy/best-route");
 
   // Installing applications
 
@@ -48,7 +48,7 @@ main(int argc, char* argv[])
   consumerHelper.Install(nodes.Get(0));                        // first node
 
   // // Consumer1
-  ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr");
+  ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr2");
   consumerHelper2.SetPrefix("/company/info");
   consumerHelper2.SetAttribute("Frequency", StringValue("1"));
   consumerHelper2.Install(nodes.Get(3)).Start(Seconds(0.5));

@@ -193,7 +193,7 @@ Consumer2::SendPacket()
   time::milliseconds interestLifeTime(m_interestLifeTime.GetMilliSeconds());
   interest->setInterestLifetime(interestLifeTime);
   char* rolaName = (char*) "abc";
-  char* SID = (char*) "M000001";
+  char* SID = (char*) "M0419169";
   char* hashValidation = (char*) "test input2";
   interest->setRoleName(rolaName);
   interest->setSID(SID);
