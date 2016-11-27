@@ -28,6 +28,7 @@
 #include "ns3/uinteger.h"
 #include "ns3/integer.h"
 #include "ns3/double.h"
+#include <time.h>
 
 #include "utils/ndn-ns3-packet-tag.hpp"
 #include "utils/ndn-rtt-mean-deviation.hpp"
@@ -36,6 +37,10 @@
 #include <boost/ref.hpp>
 
 NS_LOG_COMPONENT_DEFINE("ndn.Consumer");
+
+// static double tStart;
+// static double tEnd;
+// static double tTotal;
 
 namespace ns3 {
 namespace ndn {
@@ -156,6 +161,8 @@ Consumer::StopApplication() // Called at time specified by Stop
 void
 Consumer::SendPacket()
 {
+  // tStart=clock();
+  // std::cout<<"start"<<std::endl;
   if (!m_active)
     return;
 
@@ -195,8 +202,8 @@ Consumer::SendPacket()
 
   char* roleName = (char*) "avb";
   char* SID = (char*) "M0419169";
-  // static char* hashValidation = SHA256Generation("test input");
-  char* hashValidation = (char*)"test input";
+  static char* hashValidation = SHA256Generation("test input");
+
   interest->setRoleName(roleName);
   interest->setSID(SID);
   interest->setHashValidation(hashValidation);
@@ -266,7 +273,10 @@ Consumer::OnData(shared_ptr<const Data> data)
 
   m_rtt->AckSeq(SequenceNumber32(seq));
   NS_LOG_INFO("Receivid DATA Content is  " << readString(data->getContent()));
-
+  // tEnd = clock();
+  // std::cout<<"end"<<std::endl;
+  // tTotal = (tEnd-tStart)/CLOCKS_PER_SEC;
+  // std::cout << tTotal << " s"<<std::endl;
 }
 
 void

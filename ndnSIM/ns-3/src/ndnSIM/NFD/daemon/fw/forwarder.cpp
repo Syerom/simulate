@@ -33,6 +33,7 @@
 
 #include <boost/random/uniform_int_distribution.hpp>
 #include <string.h>
+
 namespace nfd {
 
 NFD_LOG_INIT("Forwarder");
@@ -158,7 +159,7 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
     else {
       shared_ptr<Data> match = m_csFromNdnSim->Lookup(interest.shared_from_this());
       if (match != nullptr ) {
-        if (strcmp(interest.getSID(),"M0419169"))
+        if (strcmp(interest.getHashValidation(),SHA256Generation("test input2")))
         {
           //Drop
           return;

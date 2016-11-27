@@ -2,7 +2,7 @@
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/ndnSIM-module.h"
-
+#include <time.h>
 namespace ns3 {
 
 int
@@ -19,14 +19,14 @@ main(int argc, char* argv[])
 
   // Creating nodes
   NodeContainer nodes;
-  nodes.Create(4);
+  nodes.Create(3);
 
   // Connecting nodes using two links
   PointToPointHelper p2p;
   p2p.Install(nodes.Get(0), nodes.Get(1));
   p2p.Install(nodes.Get(1), nodes.Get(2));
-  p2p.Install(nodes.Get(3), nodes.Get(1));
-  p2p.Install(nodes.Get(3), nodes.Get(2));
+  // p2p.Install(nodes.Get(3), nodes.Get(1));
+  // p2p.Install(nodes.Get(3), nodes.Get(2));
 
   // Install NDN stack on all nodes
   ndn::StackHelper ndnHelper;
@@ -48,10 +48,10 @@ main(int argc, char* argv[])
   consumerHelper.Install(nodes.Get(0));                        // first node
 
   // // Consumer1
-  ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr2");
-  consumerHelper2.SetPrefix("/company/info");
-  consumerHelper2.SetAttribute("Frequency", StringValue("1"));
-  consumerHelper2.Install(nodes.Get(3)).Start(Seconds(0.5));
+  // ndn::AppHelper consumerHelper2("ns3::ndn::ConsumerCbr2");
+  // consumerHelper2.SetPrefix("/company/info");
+  // consumerHelper2.SetAttribute("Frequency", StringValue("1"));
+  // consumerHelper2.Install(nodes.Get(3)).Start(Seconds(0.5));
 
   // Producer
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
@@ -76,6 +76,7 @@ main(int argc, char* argv[])
 
 int
 main(int argc, char* argv[])
-{
-  return ns3::main(argc, argv);
+{ 
+  ns3::main(argc, argv);
+  return 0;
 }

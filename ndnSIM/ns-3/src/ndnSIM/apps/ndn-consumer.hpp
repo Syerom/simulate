@@ -132,18 +132,18 @@ protected:
   Time
   GetRetxTimer() const;
 
-  // static char*
-  // SHA256Generation(const std::string str)
-  // {
-  //   std::string digest;
-  //   CryptoPP::SHA256 hash;
+  static char*
+  SHA256Generation(const std::string str)
+  {
+    std::string digest;
+    CryptoPP::SHA256 hash;
 
-  //   CryptoPP::StringSource foo(str, true,
-  //     new CryptoPP::HashFilter(hash,
-  //       new CryptoPP::Base64Encoder (
-  //         new CryptoPP::StringSink(digest))));
-  //   return (char*)digest.c_str();
-  // }
+    CryptoPP::StringSource foo(str, true,
+      new CryptoPP::HashFilter(hash,
+        new CryptoPP::Base64Encoder (
+          new CryptoPP::StringSink(digest))));
+    return (char*)digest.c_str();
+  }
 
 protected:
   Ptr<UniformRandomVariable> m_rand; ///< @brief nonce generator

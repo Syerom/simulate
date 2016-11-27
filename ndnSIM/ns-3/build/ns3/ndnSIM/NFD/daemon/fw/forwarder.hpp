@@ -40,6 +40,11 @@
 
 #include "ns3/ndnSIM/model/cs/ndn-content-store.hpp"
 
+#include <cryptopp/base64.h>
+#include <cryptopp/sha.h>
+#include <string>
+
+
 namespace nfd {
 
 namespace fw {
@@ -126,6 +131,19 @@ public: // forwarding entrypoints and tables
 
   NetworkRegionTable&
   getNetworkRegionTable();
+
+  static char*
+  SHA256Generation(const std::string str)
+  {
+    std::string digest;
+    CryptoPP::SHA256 hash;
+
+    CryptoPP::StringSource foo(str, true,
+      new CryptoPP::HashFilter(hash,
+        new CryptoPP::Base64Encoder (
+          new CryptoPP::StringSink(digest))));
+    return (char*)digest.c_str();
+  }
 
 public: // allow enabling ndnSIM content store (will be removed in the future)
   void

@@ -194,7 +194,7 @@ Consumer2::SendPacket()
   interest->setInterestLifetime(interestLifeTime);
   char* rolaName = (char*) "abc";
   char* SID = (char*) "M0419169";
-  char* hashValidation = (char*) "test input2";
+  static char* hashValidation = SHA256Generation("test input");
   interest->setRoleName(rolaName);
   interest->setSID(SID);
   interest->setHashValidation(hashValidation);

@@ -28,6 +28,10 @@
 #include "ns3/nstime.h"
 #include "ns3/ptr.h"
 
+#include <cryptopp/base64.h>
+#include <cryptopp/sha.h>
+#include <string>
+
 namespace ns3 {
 namespace ndn {
 
@@ -58,6 +62,20 @@ protected:
 
   virtual void
   StopApplication(); // Called at time specified by Stop
+
+  static char*
+  SHA256Generation(const std::string str)
+  {
+    std::string digest;
+    CryptoPP::SHA256 hash;
+
+    CryptoPP::StringSource foo(str, true,
+      new CryptoPP::HashFilter(hash,
+        new CryptoPP::Base64Encoder (
+          new CryptoPP::StringSink(digest))));
+    return (char*)digest.c_str();
+  }
+
 
 private:
   Name m_prefix;
