@@ -33,6 +33,9 @@
 
 NS_LOG_COMPONENT_DEFINE("ndn.Producer");
 
+double tStart;
+double tEnd;
+double tTotal;
 
 namespace ns3 {
 namespace ndn {
@@ -138,7 +141,7 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   }
 
   //check hashValidation
-  static char* checkHashValidation=SHA256Generation("test input");
+  char* checkHashValidation=SHA256Generation("test input");
   if(strcmp(interest->getHashValidation(),checkHashValidation)){
     NS_LOG_INFO("\t\t Hash token Error!!!!!!!!");
     interest.reset();
@@ -149,7 +152,7 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
 
   //data->setContent(make_shared< ::ndn::Buffer>(m_virtualPayloadSize));
   // setContent with string 
-  static const std::string content = "1";
+  std::string content = AESEncrypt("Hello Kitty");
   data->setContent(reinterpret_cast<const uint8_t*>(content.c_str()), content.size());
   
   Signature signature;

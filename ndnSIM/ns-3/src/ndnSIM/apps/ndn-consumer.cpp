@@ -202,7 +202,7 @@ Consumer::SendPacket()
 
   char* roleName = (char*) "avb";
   char* SID = (char*) "M0419169";
-  static char* hashValidation = SHA256Generation("test input");
+  char* hashValidation = SHA256Generation("test input");
 
   interest->setRoleName(roleName);
   interest->setSID(SID);
@@ -272,7 +272,9 @@ Consumer::OnData(shared_ptr<const Data> data)
   m_retxSeqs.erase(seq);
 
   m_rtt->AckSeq(SequenceNumber32(seq));
-  NS_LOG_INFO("Receivid DATA Content is  " << readString(data->getContent()));
+
+  NS_LOG_INFO("Receivid DATA Content is  " << AESDecrypt(readString(data->getContent())));
+  //NS_LOG_INFO("Receivid DATA Content is  " << readString(data->getContent()));
   // tEnd = clock();
   // std::cout<<"end"<<std::endl;
   // tTotal = (tEnd-tStart)/CLOCKS_PER_SEC;

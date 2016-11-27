@@ -42,6 +42,10 @@
 
 #include <cryptopp/base64.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/aes.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/modes.h>
+
 #include <string>
 
 namespace ns3 {
@@ -143,6 +147,22 @@ protected:
         new CryptoPP::Base64Encoder (
           new CryptoPP::StringSink(digest))));
     return (char*)digest.c_str();
+  }
+
+  std::string
+  AESDecrypt(std::string cipherText){
+    byte key[CryptoPP::AES::DEFAULT_KEYLENGTH], iv[CryptoPP::AES::BLOCKSIZE];
+    memset(key,0x00,CryptoPP::AES::DEFAULT_KEYLENGTH);
+    memset(iv,0x00,CryptoPP::AES::BLOCKSIZE);
+
+    std::string decryptText;
+    
+    CryptoPP::AES::Decryption aesDecryption(key, CryptoPP::AES::DEFAULT_KEYLENGTH);
+    CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption( aesDecryption, iv );
+    CryptoPP::StreamTransformationFilter stfDecryptor(cbcDecryption, new CryptoPP::StringSink( decryptText ));
+    stfDecryptor.Put( reinterpret_cast<const unsigned char*>( cipherText.c_str() ), cipherText.size());
+    stfDecryptor.MessageEnd();
+    return decryptText;
   }
 
 protected:

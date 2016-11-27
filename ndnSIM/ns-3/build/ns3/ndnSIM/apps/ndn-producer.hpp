@@ -28,8 +28,13 @@
 #include "ns3/nstime.h"
 #include "ns3/ptr.h"
 
+// sha256 and aes
 #include <cryptopp/base64.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/aes.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/modes.h>
+
 #include <string>
 
 namespace ns3 {
@@ -74,6 +79,25 @@ protected:
         new CryptoPP::Base64Encoder (
           new CryptoPP::StringSink(digest))));
     return (char*)digest.c_str();
+  }
+
+  std::string
+  AESEncrypt(std::string plainText){
+    byte key[CryptoPP::AES::DEFAULT_KEYLENGTH], iv[CryptoPP::AES::BLOCKSIZE];
+    memset(key,0x00,CryptoPP::AES::DEFAULT_KEYLENGTH);
+    memset(iv,0x00,CryptoPP::AES::BLOCKSIZE);
+
+    std::string cipherText;
+    CryptoPP::AES::Encryption aesEncryption(key,CryptoPP::AES::DEFAULT_KEYLENGTH);
+    CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption,iv);
+    CryptoPP::StreamTransformationFilter stfEncryptor(cbcEncryption,
+      new CryptoPP::StringSink(cipherText));
+    stfEncryptor.Put(reinterpret_cast<const unsigned char*>(plainText.c_str()),
+      plainText.length()+1);
+    stfEncryptor.MessageEnd();
+    
+ 
+    return cipherText;
   }
 
 
