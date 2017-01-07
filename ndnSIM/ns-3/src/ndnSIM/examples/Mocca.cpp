@@ -3,6 +3,8 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/ndnSIM-module.h"
 #include <time.h>
+
+
 namespace ns3 {
 
 int
@@ -44,7 +46,7 @@ main(int argc, char* argv[])
   ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
   // Consumer will request /prefix/0, /prefix/1, ...
   consumerHelper.SetPrefix("/company/info");
-  consumerHelper.SetAttribute("Frequency", StringValue("2")); // 10 interests a second
+  consumerHelper.SetAttribute("Frequency", StringValue("10")); // 10 interests a second
   consumerHelper.Install(nodes.Get(0));                        // first node
 
   // // Consumer1
@@ -64,7 +66,7 @@ main(int argc, char* argv[])
   
   //ndn::CsTracer::InstallAll("cs-trace.txt", Seconds(1));
 
-  Simulator::Stop(Seconds(2));
+  Simulator::Stop(Seconds(1000));
 
   Simulator::Run();
   Simulator::Destroy();

@@ -29,6 +29,8 @@
 #include "ns3/integer.h"
 #include "ns3/double.h"
 #include <time.h>
+#include <chrono>
+#include <iostream>
 
 #include "utils/ndn-ns3-packet-tag.hpp"
 #include "utils/ndn-rtt-mean-deviation.hpp"
@@ -89,7 +91,8 @@ Consumer::Consumer()
   NS_LOG_FUNCTION_NOARGS();
 
   m_rtt = CreateObject<RttMeanDeviation>();
-}
+
+  }
 
 void
 Consumer::SetRetxTimer(Time retxTimer)
@@ -161,8 +164,20 @@ Consumer::StopApplication() // Called at time specified by Stop
 void
 Consumer::SendPacket()
 {
-  // tStart=clock();
-  // std::cout<<"start"<<std::endl;
+  // MHT root token
+  std::string str1=std::string(this->SHA256Generation(std::string("/company/info"))).substr(0,32);
+  //std::cout<<str1<<std::endl;
+  std::string str2=std::string(this->SHA256Generation(std::string("/word.pdf"))).substr(0,32);
+  std::string str3=std::string(this->SHA256Generation(std::string("engineer"))).substr(0,32);
+  std::string str4=std::string(this->SHA256Generation(std::string("permissionsalarydeployment"))).substr(0,32);
+  std::string str5=std::string(this->SHA256Generation(str1.append(str2))).substr(0,32);
+  std::string str6=std::string(this->SHA256Generation(str3.append(str4))).substr(0,32);
+  std::string Atoken = std::string(this->SHA256Generation("M0419169MASTERKEY")).substr(0,32);
+  std::string hashValidation = std::string(this->SHA256Generation(str5.append(str6))).substr(0,32);
+  
+
+  std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+
   if (!m_active)
     return;
 
@@ -186,41 +201,47 @@ Consumer::SendPacket()
     seq = m_seq++;
   }
 
-
   shared_ptr<Name> nameWithSequence = make_shared<Name>(m_interestName);
   nameWithSequence->append(Name(std::string("/word.pdf/")));
   nameWithSequence->appendSequenceNumber(seq);
 
-  //
-
-  // shared_ptr<Interest> interest = make_shared<Interest> ();
   shared_ptr<Interest> interest = make_shared<Interest>();
   interest->setNonce(m_rand->GetValue(0, std::numeric_limits<uint32_t>::max()));
   interest->setName(*nameWithSequence);
   time::milliseconds interestLifeTime(m_interestLifeTime.GetMilliSeconds());
   interest->setInterestLifetime(interestLifeTime);
-
-  char* roleName = (char*) "avb";
+  
+  char* roleName = (char*) "engineer";
   char* SID = (char*) "M0419169";
-  char* hashValidation = SHA256Generation("test input");
+  std::ostringstream os;
+  os<< interest->getNonce();
 
+  std::string ehashValidation;
+  ehashValidation=std::string(this->SHA256Generation(Atoken.append(hashValidation).append(os.str()))).substr(0,32);
+  // hashValidation=(char*)"123";
   interest->setRoleName(roleName);
   interest->setSID(SID);
-  interest->setHashValidation(hashValidation);
+  interest->setHashValidation((char*)ehashValidation.c_str());
+  os.str()="";
+  os.clear();
+  
 
   // NS_LOG_INFO ("Requesting Interest: \n" << *interest);
-  NS_LOG_INFO("> Interest for " << seq);
-  NS_LOG_INFO("\t interest hashValidation: "<<interest->getHashValidation());
-  NS_LOG_INFO("\t SID : "<<interest->getSID());
-  NS_LOG_INFO("\t Role Name : "<<interest->getRoleName());
+  // NS_LOG_INFO("> Interest for " << seq);
+  // NS_LOG_INFO("\t interest hashValidation: "<<interest->getHashValidation());
+  // NS_LOG_INFO("\t SID : "<<interest->getSID());
+  // NS_LOG_INFO("\t Role Name : "<<interest->getRoleName());
 
 
+  std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+  std::cout<< std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count()<<"us"<<std::endl;
+  
+  writeToCSV(std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count(),std::string("clientDelay.csv"));
 
   WillSendOutInterest(seq);
 
   m_transmittedInterests(interest, this, m_face);
   m_appLink->onReceiveInterest(*interest);
-
   ScheduleNextPacket();
 }
 
@@ -275,10 +296,7 @@ Consumer::OnData(shared_ptr<const Data> data)
 
   NS_LOG_INFO("Receivid DATA Content is  " << AESDecrypt(readString(data->getContent())));
   //NS_LOG_INFO("Receivid DATA Content is  " << readString(data->getContent()));
-  // tEnd = clock();
-  // std::cout<<"end"<<std::endl;
-  // tTotal = (tEnd-tStart)/CLOCKS_PER_SEC;
-  // std::cout << tTotal << " s"<<std::endl;
+  
 }
 
 void

@@ -47,6 +47,7 @@
 #include <cryptopp/modes.h>
 
 #include <string>
+//#include <stdarg.h> //不定長引數
 
 namespace ns3 {
 namespace ndn {
@@ -136,18 +137,18 @@ protected:
   Time
   GetRetxTimer() const;
 
-  static char*
-  SHA256Generation(const std::string str)
-  {
-    std::string digest;
-    CryptoPP::SHA256 hash;
+  // char*
+  // SHA256Generation(std::string str)
+  // {
+  //   std::string digest;
+  //   CryptoPP::SHA256 hash;
 
-    CryptoPP::StringSource foo(str, true,
-      new CryptoPP::HashFilter(hash,
-        new CryptoPP::Base64Encoder (
-          new CryptoPP::StringSink(digest))));
-    return (char*)digest.c_str();
-  }
+  //   CryptoPP::StringSource foo(str, true,
+  //     new CryptoPP::HashFilter(hash,
+  //       new CryptoPP::Base64Encoder (
+  //         new CryptoPP::StringSink(digest))));
+  //   return (char*)digest.c_str();
+  // }
 
   std::string
   AESDecrypt(std::string cipherText){

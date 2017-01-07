@@ -29,6 +29,19 @@
 #include "ns3/callback.h"
 #include "ns3/traced-callback.h"
 
+// sha256 and aes
+#include <cryptopp/base64.h>
+#include <cryptopp/sha.h>
+#include <cryptopp/aes.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/hex.h>
+#include <iostream>
+#include <fstream>
+
+#include <string>
+
+
 namespace ns3 {
 
 class Packet;
@@ -84,6 +97,36 @@ public:
   typedef void (*InterestTraceCallback)(shared_ptr<const Interest>, Ptr<App>, shared_ptr<Face>);
   typedef void (*DataTraceCallback)(shared_ptr<const Data>, Ptr<App>, shared_ptr<Face>);
   // @TODO add NACK
+  
+
+  char*
+  SHA256Generation(std::string str)
+  {
+    // std::string digest;
+    // CryptoPP::SHA256 hash;
+
+    // CryptoPP::StringSource foo(str, true,
+    //   new CryptoPP::HashFilter(hash,
+    //     new CryptoPP::Base64Encoder (
+    //       new CryptoPP::StringSink(digest))));
+    // return (char*)digest.c_str();
+    byte digest[CryptoPP::SHA256::DIGESTSIZE];
+    CryptoPP::SHA256().CalculateDigest(digest, (byte*) &str[0], str.size());
+    std::string ret;
+    CryptoPP::HexEncoder encoder;
+    encoder.Attach(new CryptoPP::StringSink(ret));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+    
+    return (char*)ret.c_str();
+  }
+
+   static void writeToCSV(int time,std::string str){
+    std::fstream fp;
+    fp.open(str,std::ios::app);
+    fp<<time<<"\t"<<std::endl;
+    fp.close();
+  }
 
 protected:
   virtual void

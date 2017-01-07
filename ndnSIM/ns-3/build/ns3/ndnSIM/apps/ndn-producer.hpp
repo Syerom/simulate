@@ -36,6 +36,8 @@
 #include <cryptopp/modes.h>
 
 #include <string>
+#include <iostream>
+#include <fstream>
 
 namespace ns3 {
 namespace ndn {
@@ -68,18 +70,18 @@ protected:
   virtual void
   StopApplication(); // Called at time specified by Stop
 
-  static char*
-  SHA256Generation(const std::string str)
-  {
-    std::string digest;
-    CryptoPP::SHA256 hash;
+  // char*
+  // SHA256Generation(const std::string str)
+  // {
+  //   std::string digest;
+  //   CryptoPP::SHA256 hash;
 
-    CryptoPP::StringSource foo(str, true,
-      new CryptoPP::HashFilter(hash,
-        new CryptoPP::Base64Encoder (
-          new CryptoPP::StringSink(digest))));
-    return (char*)digest.c_str();
-  }
+  //   CryptoPP::StringSource foo(str, true,
+  //     new CryptoPP::HashFilter(hash,
+  //       new CryptoPP::Base64Encoder (
+  //         new CryptoPP::StringSink(digest))));
+  //   return (char*)digest.c_str();
+  // }
 
   std::string
   AESEncrypt(std::string plainText){
@@ -101,14 +103,27 @@ protected:
   }
 
 
+
+  int
+  compare(char* a, char* b){
+    int i=0;
+    while(a[i]!=0 && b[i]!=0){
+      std::cout<< i << a[i] << b[i]<< std::endl;
+      if (a[i]!=b[i]) return 1;
+      else i++;
+    }
+    printf("\n");
+    return 0;
+  }
+
 private:
   Name m_prefix;
   Name m_postfix;
   uint32_t m_virtualPayloadSize;
   Time m_freshness;
-
   uint32_t m_signature;
   Name m_keyLocator;
+  std::string hashValidation;
 };
 
 } // namespace ndn

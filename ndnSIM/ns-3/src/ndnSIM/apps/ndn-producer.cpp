@@ -30,12 +30,11 @@
 
 #include <memory>
 #include <string.h>
+#include <chrono>
+#include <iostream>
 
 NS_LOG_COMPONENT_DEFINE("ndn.Producer");
 
-double tStart;
-double tEnd;
-double tTotal;
 
 namespace ns3 {
 namespace ndn {
@@ -76,6 +75,14 @@ Producer::GetTypeId(void)
 Producer::Producer()
 {
   NS_LOG_FUNCTION_NOARGS();
+  std::string str1=std::string(this->SHA256Generation(std::string("/company/info"))).substr(0,32);
+  //std::cout<<str1<<std::endl;
+  std::string str2=std::string(this->SHA256Generation(std::string("/word.pdf"))).substr(0,32);
+  std::string str3=std::string(this->SHA256Generation(std::string("engineer"))).substr(0,32);
+  std::string str4=std::string(this->SHA256Generation(std::string("permissionsalarydeployment"))).substr(0,32);
+  std::string str5=std::string(this->SHA256Generation(str1.append(str2))).substr(0,32);
+  std::string str6=std::string(this->SHA256Generation(str3.append(str4))).substr(0,32);
+  this->hashValidation = std::string(this->SHA256Generation(str5.append(str6))).substr(0,32);
 }
 
 // inherited from Application base class.
@@ -99,12 +106,26 @@ Producer::StopApplication()
 void
 Producer::OnInterest(shared_ptr<const Interest> interest)
 {
-  App::OnInterest(interest); // tracing inside
+  //std::cout<<hashValidation<<std::endl;
+   // MHT root token
+  // std::string str1=std::string(this->SHA256Generation(std::string("/company/info"))).substr(0,32);
+  // //std::cout<<str1<<std::endl;
+  // std::string str2=std::string(this->SHA256Generation(std::string("/word.pdf"))).substr(0,32);
+  // std::string str3=std::string(this->SHA256Generation(std::string("engineer"))).substr(0,32);
+  // std::string str4=std::string(this->SHA256Generation(std::string("permissionsalarydeployment"))).substr(0,32);
+  // std::string str5=std::string(this->SHA256Generation(str1.append(str2))).substr(0,32);
+  // std::string str6=std::string(this->SHA256Generation(str3.append(str4))).substr(0,32);
+  // std::string hashValidation = std::string(this->SHA256Generation(str5.append(str6))).substr(0,32);
 
+
+  App::OnInterest(interest); // tracing inside
+  // Compute time
+  std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+  
   NS_LOG_FUNCTION(this << interest);
-  NS_LOG_INFO("\t HahValidation is " << interest->getHashValidation());
-  NS_LOG_INFO("\t SID is " << interest->getSID());
-  NS_LOG_INFO("\t RoleName is " << interest->getRoleName());
+  //NS_LOG_INFO("\t HahValidation is " << interest->getHashValidation());
+  //NS_LOG_INFO("\t SID is " << interest->getSID());
+  //NS_LOG_INFO("\t RoleName is " << interest->getRoleName());
 
 
 
@@ -121,33 +142,38 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   data->setName(dataName);
   NS_LOG_INFO("\t\t data name is " << data->getName());
 
-  // test for drop non-matched interest
-  
-  // if (!(interest->matchesData(*data)))
-  // {
-  //   interest.reset();
-  //   return;
-  // }
-
   // check SID underRole
-  char* roleName=(char*)"avb";
-  char* sid=(char*)"M0419169";
-  if (strcmp(interest->getSID(),sid)){
-    if (strcmp(interest->getRoleName(),roleName)){
-      NS_LOG_INFO("\t\t"<<interest->getSID()<<"is not under role..." );
-      interest.reset();
-      return;
-    }
-  }
+  std::string roleName="engineer";
+  std::string sid = "M0419169";
 
-  //check hashValidation
-  char* checkHashValidation=SHA256Generation("test input");
-  if(strcmp(interest->getHashValidation(),checkHashValidation)){
-    NS_LOG_INFO("\t\t Hash token Error!!!!!!!!");
+
+  // std::cout<<roleName<<std::endl;
+  // std::cout<<interest->getRoleName()<<std::endl;
+  if (std::string(interest->getSID())!=sid  || std::string(interest->getRoleName()) != roleName){
+    NS_LOG_INFO("\t\t"<<interest->getSID()<<"is not under role..." );
     interest.reset();
     return;
   }
 
+
+  //char* hashValidation = (char*) interest->getHashValidation();
+  std::string Atoken = std::string(this->SHA256Generation("M0419169MASTERKEY")).substr(0,32);
+  std::ostringstream os;
+  os<< interest->getNonce();
+  std::string checkHashValidation= std::string(this->SHA256Generation(Atoken.append(hashValidation).append(os.str()))).substr(0,32);
+  // printf("%s\n", checkHashValidation);
+  // printf("%s\n", interest->getHashValidation());
+  os.str()="";
+  os.clear();
+
+// this->compare(checkHashValidation,hashValidation)
+  if(checkHashValidation!=std::string(interest->getHashValidation())){
+    NS_LOG_INFO("\t\t Hash token Error!!!!!!!!");
+    
+    interest.reset();
+    return;
+  }
+ // os.clear();
   data->setFreshnessPeriod(::ndn::time::milliseconds(m_freshness.GetMilliSeconds()));
 
   //data->setContent(make_shared< ::ndn::Buffer>(m_virtualPayloadSize));
@@ -166,10 +192,15 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
 
   data->setSignature(signature);
 
-  NS_LOG_INFO("node(" << GetNode()->GetId() << ") responding with Data: " << data->getName());
-  NS_LOG_INFO("Data Content is " << readString(data->getContent()));
+  // NS_LOG_INFO("node(" << GetNode()->GetId() << ") responding with Data: " << data->getName());
+  // NS_LOG_INFO("Data Content is " << readString(data->getContent()));
   // to create real wire encoding
   data->wireEncode();
+
+  std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+  std::cout<< std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count()<<"us"<<std::endl;
+  
+  writeToCSV(std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count(),std::string("serverDelay.csv"));
 
   m_transmittedDatas(data, this, m_face);
   m_appLink->onReceiveData(*data);
