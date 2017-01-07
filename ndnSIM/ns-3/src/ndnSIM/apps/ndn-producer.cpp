@@ -169,7 +169,10 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
 // this->compare(checkHashValidation,hashValidation)
   if(checkHashValidation!=std::string(interest->getHashValidation())){
     NS_LOG_INFO("\t\t Hash token Error!!!!!!!!");
-    
+    // std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+    // std::cout<< std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count()<<"us"<<std::endl;
+    // writeToCSV(std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count(),std::string("serverTokenErrorDelay.csv"));
+
     interest.reset();
     return;
   }

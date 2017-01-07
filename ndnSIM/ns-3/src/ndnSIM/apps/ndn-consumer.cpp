@@ -236,7 +236,7 @@ Consumer::SendPacket()
   std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
   std::cout<< std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count()<<"us"<<std::endl;
   
-  writeToCSV(std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count(),std::string("clientDelay.csv"));
+  //writeToCSV(std::chrono::duration_cast<std::chrono::microseconds>(endTime-startTime).count(),std::string("clientDelay.csv"));
 
   WillSendOutInterest(seq);
 

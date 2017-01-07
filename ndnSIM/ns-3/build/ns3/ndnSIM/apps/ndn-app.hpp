@@ -122,9 +122,9 @@ public:
   }
 
    static void writeToCSV(int time,std::string str){
-    std::fstream fp;
+    std::ofstream fp;
     fp.open(str,std::ios::app);
-    fp<<time<<"\t"<<std::endl;
+    fp<<time<<",\t"<<std::endl;
     fp.close();
   }
 
